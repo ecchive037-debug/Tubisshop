@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
     res.send(`Hii, Your app is running`);
 })
 
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 })
 
