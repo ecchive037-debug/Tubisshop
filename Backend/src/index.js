@@ -10,7 +10,7 @@ const notificationRoute = require('../src/Routes/notification.route')
 
 
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["https://vercel.com/buimb-digitals-projects/tubisshop"],
     credentials: true
 }));
 
