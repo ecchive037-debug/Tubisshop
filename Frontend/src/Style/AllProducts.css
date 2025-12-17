@@ -1,0 +1,158 @@
+
+.AllProducts-page {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Container override (safe) */
+.AllProducts-page .container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 30px;
+  box-sizing: border-box;
+}
+
+/* Header */
+.AllProducts-page header {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.AllProducts-page header h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.AllProducts-page header .sub {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Section title */
+.Recomend-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 25px 0 10px;
+}
+
+.products-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 20px 0;
+}
+
+/* Back button row */
+.products-container > div[style*="grid-column"] {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* No products */
+.no-products {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.no-products h2 {
+  font-size: 1.6rem;
+  color: #ff7a00;
+  margin-bottom: 10px;
+}
+
+.no-products p {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 22px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+  .AllProducts-page .container {
+    padding: 20px;
+  }
+
+  .products-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+  }
+
+  .Recomend-text {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .AllProducts-page header h1 {
+    font-size: 1.8rem;
+  }
+
+  .AllProducts-page header .sub {
+    font-size: 0.95rem;
+  }
+
+  .products-container {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 9px 18px;
+  }
+
+  .no-products {
+    padding: 40px 15px;
+  }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+
+  .AllProducts-page .container {
+    padding: 15px 12px;
+  }
+
+  .products-container {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .Recomend-text {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .products-container > div[style*="grid-column"] {
+    justify-content: center;
+  }
+
+  .no-products h2 {
+    font-size: 1.3rem;
+  }
+
+  .no-products p {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 260px;
+  }
+}

@@ -1,0 +1,232 @@
+/* ===== General Container ===== */
+.order-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+ 
+}
+
+/* ===== Title ===== */
+.order-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1a202c;
+}
+
+/* ===== Buttons ===== */
+.order-btn-wrapper {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.Continue-Shopping {
+  background-color: #4f46e5;
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.Continue-Shopping:hover {
+  background-color: #4338ca;
+}
+
+/* ===== Order Card ===== */
+.order-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
+/* ===== Order Header ===== */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.order-header .label {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.order-header .value {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a202c;
+}
+
+/* ===== Order Items ===== */
+.order-items h4 {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: #1a202c;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.item-left img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-title {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #333;
+}
+
+.item-meta {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* ===== Order Footer ===== */
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  gap: 20px;
+}
+
+.order-footer .shipping {
+  flex: 1;
+}
+
+.order-footer .right {
+  text-align: right;
+  min-width: 120px;
+}
+
+.order-footer .label {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+.shipping div {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.muted {
+  color: #aaa;
+}
+
+.right .total {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1a202c;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .order-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-footer .right {
+    text-align: left;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Adjust title size */
+  .order-title {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+  }
+
+  /* Stack order card items vertically */
+  .order-card {
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  /* Order header stacked */
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Item images smaller and aligned */
+  .item-left {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .item-left img {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Make Continue Shopping button full width */
+  .Continue-Shopping {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+  }
+
+  /* Order footer stacked */
+  .order-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 15px;
+  }
+
+  .order-footer .right {
+    text-align: left;
+    min-width: auto;
+  }
+
+  /* Reduce font sizes for meta info */
+  .item-meta {
+    font-size: 0.8rem;
+  }
+
+  /* Reduce footer label font size */
+  .order-footer .label {
+    font-size: 0.8rem;
+  }
+}
