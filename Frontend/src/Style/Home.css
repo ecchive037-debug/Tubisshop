@@ -111,12 +111,13 @@
   margin: 0; 
 }
 
-/* Slider/banner styles (fixed width container) */
 .slider-outer {
-  margin: 20px auto;
-  width: 1500px; /* slightly reduced fixed width */
-  max-width: 100%;
+  width: 100%;
+  max-width: 1180px; /* ya jo tumhara layout hai */
+  padding: 0 12px;
+  overflow: hidden;
 }
+
 
 /* Global nav styles */
 .global-nav {
@@ -172,7 +173,7 @@
   background: rgba(0,0,0,0.45);
   color: #fff;
   border: none;
-  padding: 8px 12px;
+  padding: 8px 16px;
   font-size: 26px;
   cursor: pointer;
   border-radius: 6px;
