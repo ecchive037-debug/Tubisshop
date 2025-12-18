@@ -50,7 +50,7 @@ export default function Footer() {
           <div className="footer-grid">
             {/* Company Info */}
             <div className="footer-column">
-              <h4>Tubi Shop</h4>
+              <h4>Tubis Shop</h4>
               <p className="company-desc">
                 Your one-stop destination for premium products at unbeatable prices.
               </p>
@@ -108,7 +108,7 @@ export default function Footer() {
 
           {/* Bottom Footer */}
           <div className="footer-bottom">
-            <p className="copyright">© 2025 Tubi Shop. All rights reserved.</p>
+            <p className="copyright">© 2025 Tubis Shop. All rights reserved.</p>
             <div className="bottom-links">
               <a href="#">Sitemap</a>
               <a href="#">Accessibility</a>
