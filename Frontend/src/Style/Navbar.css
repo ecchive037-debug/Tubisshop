@@ -2,30 +2,29 @@
 .Navbar-container {
   display: flex;
   justify-content: space-between; 
-  padding: 6px 16px;
   position: sticky;
   top: 0;
   width: 100%;
-  background: #070707; /* original color */
+  background: #111111; /* original color */
   color: #f8fafc;      
   z-index: 999;
-  padding: .9rem 2rem;
   border-bottom: 1px solid black;
 }
 
 /* Logo */
 .nav-left .logo {
-  font-size: 1.8rem;
-  font-weight: 700;
+  margin: 0 1rem;
   cursor: pointer;
   color: #f8fafc;
 }
 
 .logo{
-  height: 46px;
+  height: 65px;
   margin: 0px 6px;
-  width: 200px;
+  margin-left: 4rem;
+  width: 100px;
   border-radius: 2px;
+  margin: 0 1px;
   background: transparent;
 }
 
@@ -44,6 +43,7 @@
   border: 2px solid #a4a2a2;
   color: #000;
   font-size: 1rem;
+  margin: 12px 25px;
 }
 
 .nav-center input:focus {
@@ -122,7 +122,6 @@
     flex-direction: row; 
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
   }
 
   .nav-left {
@@ -133,12 +132,14 @@
     flex: 2;
     display: flex;
     align-items: center;
-    gap: 10px; /* logo aur search bar ke beech gap */
+    justify-content: space-between;
+    gap: 15px; /* logo aur search bar ke beech gap */
   }
 
   .nav-center input[type="search"] {
-    flex: 1; /* search bar take remaining space */
-    min-width: 0; /* prevent overflow */
+    flex: 1; 
+    min-width: 0; 
+    margin: 2px auto;
   }
 
   .nav-center .btn {
@@ -147,7 +148,11 @@
   }
 
   .logo {
-    height: 40px; /* mobile ke liye logo size adjust */
-    width: auto;
+    height: 60px; /* mobile ke liye logo size adjust */
+    width: 90px;
+    margin-left: 0;
+  }
+  .nav-left .logo{
+    margin: 0;
   }
 }
