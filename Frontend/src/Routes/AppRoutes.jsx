@@ -29,7 +29,7 @@ const AppRoutes = () => {
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order-placed" element={<OrderPlaced />} />
-            <Route path="/Auth" element={<AdminAuthForm />}></Route>
+            <Route path="/auth" element={<AdminAuthForm />}></Route>
           </Route>
 
           {/* Admin routes */}
