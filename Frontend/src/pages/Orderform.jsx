@@ -145,6 +145,9 @@ const OrderForm = ({ product }) => {
         <option value="Abu Dhabi">Abu Dhabi</option>
         <option value="Sharjah">Sharjah</option>
         <option value="Ajman">Ajman</option>
+        <option value="fujairah">fujairah</option>
+        <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+        <option value="Al Ain">Al Ain</option>
       </select>
 
       {/* Address */}
