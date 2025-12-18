@@ -50,22 +50,22 @@ export default function Footer() {
           <div className="footer-grid">
             {/* Company Info */}
             <div className="footer-column">
-              <h4>BUIMB TECHNOLOGY</h4>
+              <h4>Tubi Shop</h4>
               <p className="company-desc">
                 Your one-stop destination for premium products at unbeatable prices.
               </p>
               <div className="contact-info">
                 <div className="contact-item">
                   <FaMapMarkerAlt className="icon" />
-                  <span>Lamachor, Haldwani 263139</span>
+                  <span>United Arab Emirates Dubai International City</span>
                 </div>
                 <div className="contact-item">
                   <FaPhone className="icon" />
-                  <span>+91 1234567890</span>
+                  <span>+971 567614016</span>
                 </div>
                 <div className="contact-item">
                   <FaEnvelope className="icon" />
-                  <a href="Buimb@gmail.com" className="contact-email">Buimb@gmail.com</a>
+                  <a href="tubishop.org@gmail.com" className="contact-email">Tubishop.org@gmail.com</a>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@ export default function Footer() {
 
           {/* Bottom Footer */}
           <div className="footer-bottom">
-            <p className="copyright">© 2025 BUIMB TECHNOLOGY. All rights reserved.</p>
+            <p className="copyright">© 2025 Tubi Shop. All rights reserved.</p>
             <div className="bottom-links">
               <a href="#">Sitemap</a>
               <a href="#">Accessibility</a>
