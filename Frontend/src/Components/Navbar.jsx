@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "../Style/Navbar.css";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/2.jpg"
+//import logo from "../assets/2.jpg"
+import logo from "../../public/favicon.jpg"
 
 const Navbar = () => {
   const navigate = useNavigate();
