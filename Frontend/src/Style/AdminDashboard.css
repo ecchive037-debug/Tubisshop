@@ -1,5 +1,5 @@
 /* Modern AdminDashboard styles */
-.admin-dashboard{display:flex;height:100vh;background:#f7fafc;color:#0f172a;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+.admin-dashboard{display:flex;min-height:100vh;background:#f7fafc;color:#0f172a;font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
 .admin-sidebar{width:220px;padding:28px;display:flex;flex-direction:column;gap:18px;background:linear-gradient(180deg,#0f172a, #0b1220);color:#e6eef8;transition:transform .18s ease,opacity .18s ease}
 .admin-sidebar .brand{font-weight:700;font-size:18px;letter-spacing:0.2px}
 .side-nav{display:flex;flex-direction:column;gap:8px;margin-top:6px}

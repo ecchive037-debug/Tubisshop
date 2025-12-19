@@ -1,12 +1,12 @@
 .order-form {
   max-width: 600px;
-  margin: 30px auto;
+  margin: 30px 0 0 0;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-family: Arial, sans-serif;
+  box-sizing: border-box;
 }
-
 .order-form h2 {
   text-align: center;
   margin-bottom: 20px;
