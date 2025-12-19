@@ -10,7 +10,7 @@ const notificationRoute = require('../src/Routes/notification.route')
 
 
 app.use(cors({
-    origin: ["https://www.tubisshop.com"],
+    origin: ["https://tubisshop.com", "https://www.tubisshop.com" , "http://localhost:5173"],
     credentials: true
 }));
 
@@ -28,7 +28,6 @@ app.use('/api/notifications', notificationRoute);
 
 
 
-module.exports = app;
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -42,3 +41,6 @@ app.use((err, req, res, next) => {
     console.error('Unhandled server error', err);
     return res.status(err.status || 500).json({ message: err.message || 'Server error' });
 });
+
+
+module.exports = app;
