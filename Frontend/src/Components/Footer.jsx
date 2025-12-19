@@ -76,7 +76,7 @@ export default function Footer() {
               <ul className="link-list">
                 <li><a href="/">Home</a></li>
                 <li><a href="/shop">Shop</a></li>
-                <li><a href="/contact">Contact</a></li>
+                <li><a href="tubishop.org@gmail.com">Contact</a></li>
               </ul>
             </div>
 
