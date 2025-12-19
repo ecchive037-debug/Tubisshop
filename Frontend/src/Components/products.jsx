@@ -26,12 +26,19 @@ const Products = ({ product }) => {
 
   return (
     <div className='products'>
-      <div className='productCard' onClick={openProductDetail} role="button" tabIndex={0} onKeyDown={(e)=>{ if(e.key==='Enter') openProductDetail(); }} style={{cursor:'pointer'}}>
-        <img src={images[0] || '/placeholder-product.svg'} alt={product.title} className='productImage' />   
+      <div className='productCard material' onClick={openProductDetail} role="button" tabIndex={0} onKeyDown={(e)=>{ if(e.key==='Enter') openProductDetail(); }} style={{cursor:'pointer'}}>
+        <div className='card-media'>
+          <img src={images[0] || '/placeholder-product.svg'} alt={product.title} className='productImage' />   
+        </div>
 
-        <h3 className='productTitle'>{product.title}</h3>
-        <p className='productPrice'>{product.price} AED</p>
-        
+        <div className='card-body'>
+          <h3 className='productTitle'>{product.title}</h3>
+          <p className='productPrice material-price'>{product.price} AED</p>
+          <div className='card-meta'>
+            <button className='view-btn' onClick={(e)=>{ e.stopPropagation(); openProductDetail(); }} aria-label='View product'>View</button>
+          </div>
+        </div>
+
         {(added || errorMsg) && (
           <div className={`cart-status ${added ? 'success' : errorMsg ? 'error' : ''}`}>{added ? 'Added to cart' : errorMsg}</div>
         )}

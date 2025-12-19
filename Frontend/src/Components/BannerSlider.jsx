@@ -22,7 +22,7 @@ const BannerSlider = ({ images = [], interval = 4000, width = 1200, height = 320
 
   return (
     <div className="slider-outer" style={{ maxWidth: width }}>
-      <div className="slider" style={{ height: height }}>
+      <div className="slider">
         <div
           className="slider-track"
           style={{ transform: `translateX(-${index * 100}%)` }}

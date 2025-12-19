@@ -163,6 +163,8 @@
 .slide img {
   width: 100%;
   height: 100%;
+  min-width: 100%;
+  min-height: 100%;
   object-fit: cover;
   display: block;
 }
@@ -261,14 +263,16 @@
     height: 36px;
   }
 
+  /* keep banner visible on tablet-sized screens; we'll hide only on very small phones */
   .slider {
     height: 220px;
   }
 
+  /* compact two-column layout on smaller tablets */
   .products-container {
-    padding: 15px;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 14px;
+    padding: 12px 14px;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    gap: 12px;
   }
 
   .Recomend-text {
@@ -277,18 +281,40 @@
   }
 }
 
+/* small tablets / large phones: 3 columns */
+@media (min-width: 641px) and (max-width: 768px) {
+  .products-container {
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+    gap: 14px;
+    padding: 16px;
+  }
+} 
+
+/* Slightly smaller height near 600px to avoid bottom gap */
+@media (max-width: 640px) {
+  .slider {
+    height: 200px;
+  }
+}
+
 @media (max-width: 480px) {
 
-  .slider {
+  /* Hide slider on smaller phones to save vertical space */
+  .slider, .slider-outer {
     display: none;
+    height: 160px;
   }
 
+  /* Show two compact columns on mobile so multiple products are visible per row */
   .products-container {
-    grid-template-columns: 1fr;
-    padding: 10px;
+    grid-template-columns: repeat(2, minmax(130px, 1fr));
+    padding: 8px;
+    gap: 10px;
   }
 
   .nav-search input {
     font-size: 0.9rem;
   }
-}
+
+  .Recomend-text { font-size: 1.1rem; margin-left: 12px; color: #0b1220; }
+} 

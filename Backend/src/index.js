@@ -12,7 +12,8 @@ const notificationRoute = require('../src/Routes/notification.route');
 // CORS configuration
 const allowedOrigins = [
   'https://tubisshop.com',
-  'https://www.tubisshop.com'
+  'https://www.tubisshop.com',
+  'http://localhost:5173',
 ];
 
 app.use(cors({
