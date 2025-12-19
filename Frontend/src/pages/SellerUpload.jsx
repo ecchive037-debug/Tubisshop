@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import '../Style/SellerUpload.css';
+import truncateTitle from '../utils/truncateTitle';
 const API = import.meta.env.VITE_API_URL;
 
 const SellerUpload = () => {

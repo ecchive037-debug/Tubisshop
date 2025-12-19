@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../Style/OrderPlaced.css';
+import truncateTitle from '../utils/truncateTitle';
 
 const OrderPlaced = () => {
   const { state } = useLocation();
@@ -51,7 +52,7 @@ const OrderPlaced = () => {
                   alt={it.title}
                 />
                 <div>
-                  <div className="item-title">{it.title || 'Untitled'}</div>
+                  <div className="item-title">{truncateTitle(it.title || 'Untitled', 3)}</div>
                   <div className="item-meta">
                     {it.quantity} × {it.price} AED
                   </div>

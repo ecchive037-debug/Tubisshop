@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Style/AdminDashboard.css';
+import truncateTitle from '../utils/truncateTitle';
 // reuse admin orders styles for compact cards + modal
 import '../Style/AdminOrders.css';
 
@@ -205,7 +206,7 @@ const AdminDashboard = () => {
                   <li key={p.id} className="recent-item">
                     <img src={p.img || '/placeholder-product.png'} alt={p.title} />
                     <div className="meta">
-                      <div className="title">{p.title}</div>
+                      <div className="title">{truncateTitle(p.title, 3) || p.id}</div>
                       <div className="sub">{p.id} • {p.price}</div>
                       {p.shippingAddress ? (
                         <div className="address smallish" title={p.shippingAddress && JSON.stringify(p.shippingAddress)}>
@@ -256,7 +257,7 @@ const AdminDashboard = () => {
        {/* Product-specific orders (shown after clicking 'View Orders' on a product) */}
         {selectedProduct ? (
           <section className="card" style={{ maxWidth: 1200, margin: '0 auto' }}>
-            <h3 className="card-title">Orders for "{selectedProduct.title || selectedProduct.id}"</h3>
+            <h3 className="card-title">Orders for "{truncateTitle(selectedProduct.title, 3) || selectedProduct.id}"</h3>
             {productOrdersLoading ? (
               <div>Loading orders…</div>
             ) : productOrders.length === 0 ? (

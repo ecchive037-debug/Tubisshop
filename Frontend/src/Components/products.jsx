@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../Style/products.css'
 import { useNavigate } from 'react-router-dom';
+import truncateTitle from '../utils/truncateTitle';
 
 const Products = ({ product }) => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const Products = ({ product }) => {
         </div>
 
         <div className='card-body'>
-          <h3 className='productTitle'>{product.title}</h3>
+          <h3 className='productTitle'>{truncateTitle(product.title, 3) || 'Untitled'}</h3>
           <p className='productPrice material-price'>{product.price} AED</p>
           <div className='card-meta'>
             <button className='view-btn' onClick={(e)=>{ e.stopPropagation(); openProductDetail(); }} aria-label='View product'>View</button>

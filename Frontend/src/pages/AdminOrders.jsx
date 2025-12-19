@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../Style/AdminDashboard.css';
 import '../Style/AdminOrders.css';
+import truncateTitle from '../utils/truncateTitle';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -155,7 +156,7 @@ const AdminOrders = () => {
                         <div key={String(it.product)} className="om-item-row">
                           <div className="om-item-thumb"><img src={it.img || it.image || '/placeholder.png'} alt={it.title} /></div>
                           <div className="om-item-body">
-                            <div className="om-item-title">{it.title}</div>
+                            <div className="om-item-title">{truncateTitle(it.title || 'Untitled', 3)}</div>
                             <div className="om-item-sub">{it.quantity} × {parseFloat(String(it.price).replace(/[^0-9.-]+/g,''))?.toFixed?.(2)} AED</div>
                           </div>
                          

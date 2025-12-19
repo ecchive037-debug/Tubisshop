@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Style/Orders.css';
+import truncateTitle from '../utils/truncateTitle';
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ const Orders = () => {
                     <div key={String(it.product)} className="mini-item">
                       <div className="thumb"><img src={it.img || '/placeholder.png'} alt={it.title || it.product} /></div>
                       <div className="meta">
-                        <div className="title">{it.title || 'Untitled'}</div>
+                        <div className="title">{truncateTitle(it.title || 'Untitled', 3)}</div>
                         <div className="qty">{it.quantity} × ${parseFloat(String(it.price).replace(/[^0-9.-]+/g, ''))?.toFixed?.(2)}</div>
                       </div>
                     </div>
