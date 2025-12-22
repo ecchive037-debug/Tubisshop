@@ -9,20 +9,45 @@ const AllProducts = () => {
   const [search, setSearch] = useState('');
   const [isSearched, setIsSearched] = useState(false);
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
+  const pageSentinelRef = React.useRef(null);
 
+  const fetchProductsPage = async (p = 1) => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${API}/api/products?page=${p}&limit=12`);
+      if (!res.ok) throw new Error('Failed to fetch products');
+      const data = await res.json();
+      setProducts(prev => p === 1 ? (data.products || []) : [...prev, ...(data.products || [])]);
+      setPage(data.page || p);
+      setPages(data.pages || 1);
+      setHasMore((data.page || p) < (data.pages || 1));
+    } catch (err) {
+      console.error('Error fetching products:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchProductsPage(1); }, []);
+
+  // observe sentinel to fetch more pages
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`${API}/api/products`);
-        if (!res.ok) throw new Error('Failed to fetch products');
-        const data = await res.json();
-        setProducts(data.products || []);
-      } catch (err) {
-        console.error('Error fetching products:', err);
-      }
-    };
-    fetchProducts();
-  }, []);
+    const node = pageSentinelRef.current;
+    if (!node) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && hasMore && !loading) {
+          fetchProductsPage(page + 1);
+        }
+      });
+    }, { rootMargin: '400px' });
+    io.observe(node);
+    return () => io.disconnect();
+  }, [pageSentinelRef.current, hasMore, loading, page]);
 
   const filteredProducts = isSearched
     ? products.filter(p => p.title.toLowerCase().includes(search.toLowerCase()))
@@ -53,6 +78,7 @@ const AllProducts = () => {
               elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
               if (i % 12 === 11) elems.push(<div key={`sent-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
             });
+            if (hasMore) elems.push(<div key={`page-sentinel`} ref={pageSentinelRef} className="page-sentinel" />);
             return elems;
           })()}
 

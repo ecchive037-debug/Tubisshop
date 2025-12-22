@@ -47,20 +47,52 @@ const Home = () => {
 }, []);
 
   
-  // Fetch products from backend
+  // Fetch products from backend with pagination (initial load and lazy "load more")
+  const [page, setPage] = React.useState(1);
+  const [pages, setPages] = React.useState(1);
+  const [loadingProducts, setLoadingProducts] = React.useState(false);
+  const [hasMore, setHasMore] = React.useState(true);
+  const pageSentinelRef = React.useRef(null);
+  const isMountedRef = React.useRef(true);
+
+  const fetchProductsPage = async (p = 1) => {
+    try {
+      setLoadingProducts(true);
+      const res = await fetch(`${API}/api/products?page=${p}&limit=12`);
+      if (!res.ok) throw new Error('Failed to fetch products');
+      const data = await res.json();
+      if (!isMountedRef.current) return;
+      setProducts(prev => p === 1 ? (data.products || []) : [...prev, ...(data.products || [])]);
+      setPage(data.page || p);
+      setPages(data.pages || 1);
+      setHasMore((data.page || p) < (data.pages || 1));
+    } catch (err) {
+      console.error('Error fetching products:', err);
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch(`${API}/api/products`);
-        if (!res.ok) throw new Error('Failed to fetch products');
-        const data = await res.json();
-        setProducts(data.products || []);
-      } catch (err) {
-        console.error('Error fetching products:', err);
-      }
-    };
-    fetchProducts();
+    isMountedRef.current = true;
+    fetchProductsPage(1);
+    return () => { isMountedRef.current = false; };
   }, []);
+
+  // observe the page sentinel to load the next page
+  useEffect(() => {
+    const node = pageSentinelRef.current;
+    if (!node) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && hasMore && !loadingProducts) {
+          fetchProductsPage(page + 1);
+        }
+      });
+    }, { rootMargin: '400px' });
+    io.observe(node);
+    return () => io.disconnect();
+  }, [pageSentinelRef.current, hasMore, loadingProducts, page]);
 
   // Search button
   const handleSearch = () => {
@@ -109,6 +141,8 @@ const Home = () => {
         elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
         if (i % 12 === 11) elems.push(<div key={`sent-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
       });
+      // page sentinel to trigger fetching next page when visible
+      if (hasMore) elems.push(<div key={`page-sentinel`} ref={pageSentinelRef} className="page-sentinel" />);
       return elems;
     })()}
     {isSearched && filteredProducts.length > 0 && (() => {
@@ -116,8 +150,9 @@ const Home = () => {
       filteredProducts.forEach((product, i) => {
         const batch = Math.floor(i / 12);
         elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
-        if (i % 12 === 11) elems.push(<div key={`sentf-${batch}`} className="batch-sentinel" data-batch={batch} />);
+        if (i % 12 === 11) elems.push(<div key={`sentf-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
       });
+      // if we implemented search pagination later, we would add a page sentinel here too
       return elems;
     })()}
     {isSearched && filteredProducts.length === 0 && (

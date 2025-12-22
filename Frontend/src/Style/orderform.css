@@ -1,7 +1,7 @@
 .order-form {
-  width: 100%; /* fill the meta column */
-  max-width: 100%;
-  margin: 30px 0 0 0;
+  max-width: 600px; /* limit form to 600px width */
+  width: 100%;
+  margin: 30px auto 0 auto; /* center the form horizontally */
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -9,15 +9,8 @@
   box-sizing: border-box;
 }
 
-/* ensure order form inside detail-meta uses full column width */
-.detail-meta .order-form{width:100%;max-width:100%}
-
-@media (max-width: 760px) {
-  .order-form {
-    width: 100%;
-    min-width: auto;
-  }
-}
+/* ensure order form inside detail-meta uses the same max-width */
+.detail-meta .order-form { width: 100%; max-width: 600px; }
 .order-form h2 {
   text-align: center;
   margin-bottom: 20px;

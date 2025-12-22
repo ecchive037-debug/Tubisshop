@@ -37,8 +37,26 @@ async function createProduct(req, res) {
 
 async function getProducts(req, res) {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
-    return res.status(200).json({ products });
+    // Support pagination and basic search
+    // Query params: page (1-indexed), limit, q (search term)
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.max(1, Math.min(100, parseInt(req.query.limit, 10) || 12));
+    const q = (req.query.q || '').trim();
+
+    const filter = {};
+    if (q) {
+      // simple case-insensitive title search
+      filter.title = { $regex: q, $options: 'i' };
+    }
+
+    const total = await Product.countDocuments(filter);
+    const pages = Math.ceil(total / limit) || 1;
+    const skip = (page - 1) * limit;
+
+    // Return a lighter payload for listing pages to speed up responses
+    const products = await Product.find(filter).select('title price images img').sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+    return res.status(200).json({ products, page, pages, total });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Server error' });

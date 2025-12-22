@@ -21,7 +21,8 @@ body{margin:0;font-family:'Roboto',sans-serif;-webkit-font-smoothing:antialiased
 /* sentinel used to trigger loading of next batch of images
    Keep it invisible and non-participating in layout to avoid creating gaps.
 */
-.batch-sentinel{
+.batch-sentinel,
+.page-sentinel{
   grid-column: 1 / -1;
   height: 0;
   width: 100%;

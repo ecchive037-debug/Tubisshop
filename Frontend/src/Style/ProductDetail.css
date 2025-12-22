@@ -1,20 +1,28 @@
 .product-detail{width:100%;margin:30px auto;padding:18px;background:var(--card-bg, #fff);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06);font-family:'Roboto',sans-serif}
 .detail-header{display:flex;gap:24px;align-items:flex-start;justify-content:space-between;align-items:stretch}
 
-/* Image and meta each take half the available width on larger screens */
-.detail-image-wrap{flex:0 0 50%;width:50%;box-sizing:border-box}
-.detail-meta{flex:0 0 50%;width:50%;box-sizing:border-box;min-width:320px;display:flex;flex-direction:column;justify-content:flex-start}
-.detail-image-wrap{flex:0 0 360px;width:360px;background:#f8fafc;padding:12px;border-radius:6px}
-.detail-image{width:100%;height:360px; object-fit:cover;border-radius:6px}
+/* Image and meta — fix meta (form) width to 580px and let image area take remaining space */
+.detail-meta{flex:0 0 580px;width:580px;box-sizing:border-box;min-width:320px;display:flex;flex-direction:column;justify-content:flex-start}
+.detail-image-wrap{flex:1;width:auto;min-width:420px;background:#f8fafc;padding:12px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.detail-image{max-width:100%;height:auto;max-height:420px;object-fit:contain;border-radius:6px;display:block;margin:0 auto}
+
+/* ensure thumbnail list sits below image and is centered */
+.thumbnail-list{width:100%;display:flex;gap:8px;margin-top:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+
+/* Make taller images scale down and center without cropping */
+@media (max-width: 760px){
+  .detail-image{max-height:320px}
+  .detail-image-wrap{min-width:unset;width:100%}
+}
 
 /* thumbnail list (click to change main image) */
 .thumbnail-list{display:flex;gap:8px;margin-top:12px;align-items:center;justify-content:flex-start;flex-wrap:wrap}
-.thumbnail{display:inline-block;width:64px;height:64px;padding:2px;border-radius:8px;background:transparent;border:2px solid transparent;overflow:hidden;cursor:pointer}
+.thumbnail{display:inline-block;width:72px;height:72px;padding:2px;border-radius:8px;background:transparent;border:2px solid transparent;overflow:hidden;cursor:pointer}
 .thumbnail img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block}
-.thumbnail.active{border-color:#ef4444;transform:scale(1.03)}
+.thumbnail.active{border-color:#ef4444;transform:scale(1.04)}
 .thumbnail:focus{outline:none;box-shadow:0 0 0 3px rgba(239,122,0,0.14)}
 .detail-meta{flex:1;padding-left:16px;padding-right:16px;box-sizing:border-box;min-width:320px;display:flex;flex-direction:column;justify-content:flex-start}
-.detail-title{font-size:18px;margin:0 0 12px 0;max-width:360px;line-height:1.15;font-weight:600;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.detail-title{font-size:18px;margin:0 0 12px 0;max-width:540px;line-height:1.15;font-weight:600;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .detail-price{font-weight:700;color:#0f172a;margin-bottom:12px;font-size:32px;}
 .detail-about h3{margin:12px 0 6px}
 .detail-about{width:100%;margin:30px auto;padding:18px;background:var(--card-bg, #fff);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06);font-family:'Roboto',sans-serif}
