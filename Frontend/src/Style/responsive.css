@@ -1,4 +1,5 @@
 /* Global responsive utilities - mobile-first */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 :root{
   --container-max:1200px;
   --gap:16px;
@@ -6,7 +7,7 @@
 
 /* Ensure base layout is fluid */
 html,body,#root{height:100%;}
-body{margin:0;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{margin:0;font-family:'Roboto',sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 .container{width:100%;max-width:var(--container-max);margin:0 auto;padding:0 16px;box-sizing:border-box}
 
@@ -16,6 +17,21 @@ body{margin:0;font-family:Inter,system-ui,Arial,Helvetica,sans-serif;-webkit-fon
 .hidden{display:none}
 
 /* Images and media scale */
+
+/* sentinel used to trigger loading of next batch of images
+   Keep it invisible and non-participating in layout to avoid creating gaps.
+*/
+.batch-sentinel{
+  grid-column: 1 / -1;
+  height: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 img{max-width:100%;height:auto;display:block}
 
 /* Typography scaling */

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../Style/Navbar.css";
 import { useNavigate } from "react-router-dom";
 //import logo from "../assets/2.jpg"
 import logo from "../../public/favicon.png"
+import { TiktokPixel, loadGTM } from '../Components/script.js';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,6 +13,13 @@ const Navbar = () => {
     if (search.trim() === "") return alert("Please enter a search term");
     navigate(`/search?q=${encodeURIComponent(search)}`);
   };
+useEffect(() => {
+    // Load GTM after page loads
+    loadGTM();
+
+    // You can also trigger TikTok custom events
+    TiktokPixel.track('PageView');
+  }, []);
 
   return (
     <div className="Navbar">

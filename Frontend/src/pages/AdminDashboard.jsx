@@ -4,6 +4,7 @@ import '../Style/AdminDashboard.css';
 import truncateTitle from '../utils/truncateTitle';
 // reuse admin orders styles for compact cards + modal
 import '../Style/AdminOrders.css';
+import LazyImage from '../Components/LazyImage';
 
 const AdminDashboard = () => {
   const [adminName, setAdminName] = useState('');
@@ -204,7 +205,7 @@ const AdminDashboard = () => {
               <ul className="recent-list">
                 {recentProducts.map(p => (
                   <li key={p.id} className="recent-item">
-                    <img src={p.img || '/placeholder-product.png'} alt={p.title} />
+                    <LazyImage src={p.img || '/placeholder-product.png'} alt={p.title} />
                     <div className="meta">
                       <div className="title">{truncateTitle(p.title, 3) || p.id}</div>
                       <div className="sub">{p.id} • {p.price}</div>
@@ -340,7 +341,7 @@ const AdminDashboard = () => {
                     <div className="panel-title">Items</div>
                     {selectedOrder.items?.map(it => (
                       <div key={String(it.product)} className="om-item-row">
-                        <div className="om-item-thumb"><img src={it.img || it.image || '/placeholder.png'} alt={it.title} /></div>
+                        <div className="om-item-thumb"><LazyImage src={it.img || it.image || '/placeholder.png'} alt={it.title} /></div>
                         <div className="om-item-body">
                           <div className="om-item-title">{it.title}</div>
                           <div className="om-item-sub">{it.quantity} × AED{parseFloat(String(it.price).replace(/[^0-9.-]+/g,''))?.toFixed?.(2)}</div>

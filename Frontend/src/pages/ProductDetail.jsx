@@ -3,6 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import '../Style/ProductDetail.css';
 import Orderform from "../pages/Orderform.jsx";
+import LazyImage from '../Components/LazyImage';
 // Footer provided by layout
 
 const API = import.meta.env.VITE_API_URL;
@@ -57,11 +58,11 @@ const ProductDetail = () => {
     <div className="product-detail">
       <div className="detail-header">
         <div className="detail-image-wrap">
-          <img src={mainImage || product.img || '/placeholder-product.svg'} alt={product.title} className="detail-image" />
+          <LazyImage src={mainImage || product.img || '/placeholder-product.svg'} alt={product.title} className="detail-image" />
           {/* image selector dots (click to change main image) */}
           {(product.images && product.images.length > 0) && (
             <div className="image-dots">
-              {product.images.slice(0, 2).map((it, idx) => (
+              {product.images.map((it, idx) => (
                 <div
                   key={idx}
                   role="button"

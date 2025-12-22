@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import '../Style/products.css'
 import { useNavigate } from 'react-router-dom';
 import truncateTitle from '../utils/truncateTitle';
+import LazyImage from './LazyImage';
 
-const Products = ({ product }) => {
+const Products = ({ product, index, batchIndex }) => {
   const navigate = useNavigate();
 
   const [adding, setAdding] = useState(false);
@@ -29,7 +30,7 @@ const Products = ({ product }) => {
     <div className='products'>
       <div className='productCard material' onClick={openProductDetail} role="button" tabIndex={0} onKeyDown={(e)=>{ if(e.key==='Enter') openProductDetail(); }} style={{cursor:'pointer'}}>
         <div className='card-media'>
-          <img src={images[0] || '/placeholder-product.svg'} alt={product.title} className='productImage' />   
+          <LazyImage src={images[0] || '/placeholder-product.svg'} alt={product.title} className='productImage' batchIndex={batchIndex} />   
         </div>
 
         <div className='card-body'>

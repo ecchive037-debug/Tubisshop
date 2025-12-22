@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import '../Style/SellerUpload.css';
 import truncateTitle from '../utils/truncateTitle';
+import LazyImage from '../Components/LazyImage';
 const API = import.meta.env.VITE_API_URL;
 
 const SellerUpload = () => {
@@ -194,18 +195,18 @@ const SellerUpload = () => {
             </div>
 
             <div className="product-thumb modern-thumb" style={{display:'flex',flexDirection:'column',gap:8}}>
-              {previewSrc ? <img src={previewSrc} alt="preview" onError={(e)=>{e.target.onerror=null;e.target.src='/placeholder-product.png'}} /> : (
+              {previewSrc ? <LazyImage src={previewSrc} alt="preview" onError={(e)=>{e.target.onerror=null;e.target.src='/placeholder-product.png'}} /> : (
                 <div style={{padding:18,textAlign:'center',color:'#94a3b8'}}>No image — place a valid image URL or upload a picture</div>
-              )}
+              )} 
 
               {/* thumbnails for multiple images */}
               {images && images.length > 0 && (
                 <div style={{display:'flex',gap:8,marginTop:8}}>
                   {images.map((it, idx) => (
                     <div key={idx} style={{position:'relative'}}>
-                      <img src={it} alt={`preview-${idx}`} style={{width:72,height:72,objectFit:'cover',borderRadius:6}} onClick={()=>setFilePreview(it)} />
+                      <LazyImage src={it} alt={`preview-${idx}`} style={{width:72,height:72,objectFit:'cover',borderRadius:6,cursor:'pointer'}} onClick={()=>setFilePreview(it)} />
                       <button type="button" onClick={()=>{
-                        setImages(prev => prev.filter((_,i)=>i!==idx));
+                                                setImages(prev => prev.filter((_,i)=>i!==idx));
                         if (filePreview === it) setFilePreview((prevArr => ((images[0] && images[0] !== it) ? images[0] : '')));
                       }} className="btn-sm" style={{position:'absolute',right:-8,top:-8}}>×</button>
                     </div>

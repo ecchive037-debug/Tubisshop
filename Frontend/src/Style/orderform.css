@@ -1,11 +1,20 @@
 .order-form {
-  max-width: 600px;
+  width: 600px;
+  max-width: 100%;
+  min-width: 260px;
   margin: 30px 0 0 0;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   box-sizing: border-box;
+}
+
+@media (max-width: 760px) {
+  .order-form {
+    width: 100%;
+    min-width: auto;
+  }
 }
 .order-form h2 {
   text-align: center;

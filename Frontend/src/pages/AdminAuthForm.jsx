@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../Style/UserAuthForm.css";
 import avatar from "../assets/avtar.png";
+import LazyImage from '../Components/LazyImage';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -101,7 +102,7 @@ export default function AdminAuthForm() {
 
         <div className="auth-right">
           <div className="lock-icon">
-            <img src={avatar} alt="avatar" />
+            <LazyImage src={avatar} alt="avatar" />
           </div>
 
           <p className="subtitle">

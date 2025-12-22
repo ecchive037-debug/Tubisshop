@@ -41,14 +41,17 @@ const SearchResults = () => {
     <div className="Home-container">
       <h2 className="search-header">Search Results for "{searchTerm}"</h2>
       <div className="products-container">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => {
-            // replace leading $ with AED for display on Search Results
+        {filteredProducts.length > 0 ? (() => {
+          const elems = [];
+          filteredProducts.forEach((product, i) => {
             const price = typeof product.price === 'string' ? product.price.replace(/^\s*\$/,'AED ') : product.price;
             const p = { ...product, price };
-            return <Products key={product._id || product.id} product={p} />;
-          })
-        ) : (
+            const batch = Math.floor(i / 12);
+            elems.push(<Products key={product._id || product.id} product={p} index={i} batchIndex={batch} />);
+            if (i % 12 === 11) elems.push(<div key={`sentf-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
+          });
+          return elems;
+        })() : (
           <div className="no-products">
             <h3>❌ No products found for "{searchTerm}"</h3>
             <button className="btn" onClick={() => navigate("/")}>

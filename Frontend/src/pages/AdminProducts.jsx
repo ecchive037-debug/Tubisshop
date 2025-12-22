@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../Style/AdminDashboard.css';
 import '../Style/AdminProducts.css';
 import truncateTitle from '../utils/truncateTitle';
+import LazyImage from '../Components/LazyImage';
 
 // Small helper component to show truncated title with an expand toggle (admin-only list)
 function TitleWithToggle({ title, id }) {
@@ -91,7 +92,7 @@ const AdminProducts = () => {
         <div className="products-grid">
           {products.map(p => (
             <article className="product-card admin" key={p._id}>
-              <img src={(p.images && p.images.length ? p.images[0] : p.img) || '/placeholder-product.png'} alt={p.title} />
+              <LazyImage src={(p.images && p.images.length ? p.images[0] : p.img) || '/placeholder-product.png'} alt={p.title} />
               <div className="product-meta">
                 <div className="price">AED {p.price}</div>
                 <div className={`title ${p._id}`}>{/* title + toggle handled below */}

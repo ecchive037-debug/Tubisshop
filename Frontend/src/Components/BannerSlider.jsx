@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import LazyImage from './LazyImage';
 
 const BannerSlider = ({ images = [], interval = 4000, width = 1200, height = 320 }) => {
   const [index, setIndex] = useState(0);
@@ -29,7 +30,7 @@ const BannerSlider = ({ images = [], interval = 4000, width = 1200, height = 320
         >
           {images.map((src, i) => (
             <div className="slide" key={i} style={{ width: '100%', height: '100%' }}>
-              <img src={src} alt={`slide-${i}`} />
+              <LazyImage src={src} alt={`slide-${i}`} />
             </div>
           ))}
         </div>

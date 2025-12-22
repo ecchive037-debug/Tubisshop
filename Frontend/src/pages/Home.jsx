@@ -102,12 +102,24 @@ const Home = () => {
         </button>
       </div>
     )}
-    {!isSearched && products.map((product) => (
-      <Products key={product._id || product.id} product={product} />
-    ))}
-    {isSearched && filteredProducts.length > 0 && filteredProducts.map((product) => (
-      <Products key={product._id || product.id} product={product} />
-    ))}
+    {!isSearched && (() => {
+      const elems = [];
+      products.forEach((product, i) => {
+        const batch = Math.floor(i / 12);
+        elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
+        if (i % 12 === 11) elems.push(<div key={`sent-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
+      });
+      return elems;
+    })()}
+    {isSearched && filteredProducts.length > 0 && (() => {
+      const elems = [];
+      filteredProducts.forEach((product, i) => {
+        const batch = Math.floor(i / 12);
+        elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
+        if (i % 12 === 11) elems.push(<div key={`sentf-${batch}`} className="batch-sentinel" data-batch={batch} />);
+      });
+      return elems;
+    })()}
     {isSearched && filteredProducts.length === 0 && (
       <div className="no-products">
         <h2>❌ No products found for "{search}"</h2>
