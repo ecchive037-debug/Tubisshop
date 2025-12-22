@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import '../Style/AllProducts.css';
 import Products from '../Components/products.jsx';
 // Footer provided by layout
@@ -13,14 +13,15 @@ const AllProducts = () => {
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const pageSentinelRef = React.useRef(null);
+  const pageSentinelRef = useRef(null);
 
-  const fetchProductsPage = async (p = 1) => {
+  const fetchProductsPage = useCallback(async (p = 1) => {
     try {
       setLoading(true);
-      const res = await fetch(`${API}/api/products?page=${p}&limit=12`);
+      const res = await fetch(`${API}/api/products?page=${p}&limit=5`);
       if (!res.ok) throw new Error('Failed to fetch products');
       const data = await res.json();
+      
       setProducts(prev => p === 1 ? (data.products || []) : [...prev, ...(data.products || [])]);
       setPage(data.page || p);
       setPages(data.pages || 1);
@@ -30,11 +31,12 @@ const AllProducts = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  useEffect(() => { fetchProductsPage(1); }, []);
+  useEffect(() => {
+    fetchProductsPage(1);
+  }, [fetchProductsPage]);
 
-  // observe sentinel to fetch more pages
   useEffect(() => {
     const node = pageSentinelRef.current;
     if (!node) return;
@@ -47,11 +49,13 @@ const AllProducts = () => {
     }, { rootMargin: '400px' });
     io.observe(node);
     return () => io.disconnect();
-  }, [pageSentinelRef.current, hasMore, loading, page]);
+  }, [hasMore, loading, page, fetchProductsPage]);
 
-  const filteredProducts = isSearched
-    ? products.filter(p => p.title.toLowerCase().includes(search.toLowerCase()))
-    : [];
+  const filteredProducts = useMemo(() => {
+    return isSearched
+      ? products.filter(p => p.title.toLowerCase().includes(search.toLowerCase()))
+      : [];
+  }, [isSearched, products, search]);
 
   return (
     <div className="AllProducts-page">
@@ -72,24 +76,18 @@ const AllProducts = () => {
           )}
 
           {!isSearched && (() => {
-            const elems = [];
-            products.forEach((product, i) => {
-              const batch = Math.floor(i / 12);
-              elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
-              if (i % 12 === 11) elems.push(<div key={`sent-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
-            });
-            if (hasMore) elems.push(<div key={`page-sentinel`} ref={pageSentinelRef} className="page-sentinel" />);
-            return elems;
+            return products.map((product) => (
+              <Products key={product._id || product.id} product={product} />
+            ));
           })()}
+          {!isSearched && hasMore && (
+            <div key={`page-sentinel`} ref={pageSentinelRef} style={{ gridColumn: '1 / -1', height: '1px' }} />
+          )}
 
           {isSearched && filteredProducts.length > 0 && (() => {
-            const elems = [];
-            filteredProducts.forEach((product, i) => {
-              const batch = Math.floor(i / 12);
-              elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
-              if (i % 12 === 11) elems.push(<div key={`sentf-${batch}`} className="batch-sentinel" data-batch={batch} />);
-            });
-            return elems;
+            return filteredProducts.map((product) => (
+              <Products key={product._id || product.id} product={product} />
+            ));
           })()}
 
           {isSearched && filteredProducts.length === 0 && (

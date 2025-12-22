@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../Style/Home.css";
 import Products from '../Components/products.jsx';
 import bannerImg from "../assets/home-banner.jpg";
@@ -12,56 +12,21 @@ const API = import.meta.env.VITE_API_URL;
 const Home = () => {
   const [search, setSearch] = useState("");
   const [isSearched, setIsSearched] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isSeller, setIsSeller] = useState(false);
   const navigate = useNavigate();
-  // Products fetched from backend
-  const [products, setProducts] = React.useState([]);
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const pageSentinelRef = useRef(null);
 
-  useEffect(() => {
-  const adminToken = localStorage.getItem("sellerToken"); // or "adminToken" if you store it like that
-  setIsLoggedIn(!!adminToken);
-  setIsSeller(!!adminToken);
-
-  // Listen for storage changes (admin logs in/out in another tab)
-  const handleStorageChange = () => {
-    const updatedAdminToken = localStorage.getItem("sellerToken");
-    setIsLoggedIn(!!updatedAdminToken);
-    setIsSeller(!!updatedAdminToken);
-  };
-
-  // Listen for custom admin login event
-  const handleAdminLoggedIn = () => {
-    const updatedAdminToken = localStorage.getItem("sellerToken");
-    setIsLoggedIn(!!updatedAdminToken);
-    setIsSeller(!!updatedAdminToken);
-  };
-
-  window.addEventListener("storage", handleStorageChange);
-  window.addEventListener("adminLoggedIn", handleAdminLoggedIn);
-
-  return () => {
-    window.removeEventListener("storage", handleStorageChange);
-    window.removeEventListener("adminLoggedIn", handleAdminLoggedIn);
-  };
-}, []);
-
-  
-  // Fetch products from backend with pagination (initial load and lazy "load more")
-  const [page, setPage] = React.useState(1);
-  const [pages, setPages] = React.useState(1);
-  const [loadingProducts, setLoadingProducts] = React.useState(false);
-  const [hasMore, setHasMore] = React.useState(true);
-  const pageSentinelRef = React.useRef(null);
-  const isMountedRef = React.useRef(true);
-
-  const fetchProductsPage = async (p = 1) => {
+  const fetchProductsPage = useCallback(async (p = 1) => {
     try {
       setLoadingProducts(true);
-      const res = await fetch(`${API}/api/products?page=${p}&limit=12`);
+      const res = await fetch(`${API}/api/products?page=${p}&limit=5`);
       if (!res.ok) throw new Error('Failed to fetch products');
       const data = await res.json();
-      if (!isMountedRef.current) return;
+      
       setProducts(prev => p === 1 ? (data.products || []) : [...prev, ...(data.products || [])]);
       setPage(data.page || p);
       setPages(data.pages || 1);
@@ -71,15 +36,12 @@ const Home = () => {
     } finally {
       setLoadingProducts(false);
     }
-  };
-
-  useEffect(() => {
-    isMountedRef.current = true;
-    fetchProductsPage(1);
-    return () => { isMountedRef.current = false; };
   }, []);
 
-  // observe the page sentinel to load the next page
+  useEffect(() => {
+    fetchProductsPage(1);
+  }, [fetchProductsPage]);
+
   useEffect(() => {
     const node = pageSentinelRef.current;
     if (!node) return;
@@ -92,27 +54,26 @@ const Home = () => {
     }, { rootMargin: '400px' });
     io.observe(node);
     return () => io.disconnect();
-  }, [pageSentinelRef.current, hasMore, loadingProducts, page]);
+  }, [hasMore, loadingProducts, page, fetchProductsPage]);
 
-  // Search button
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     if (search.trim() === "") {
       alert("Please enter a search term");
     } else {
       setIsSearched(true);
     }
-  };
+  }, [search]);
 
-  // Clear search - show all products again
-  const handleClearSearch = () => {
+  const handleClearSearch = useCallback(() => {
     setSearch("");
     setIsSearched(false);
-  };
+  }, []);
 
-  // Get filtered products only after search button is clicked
-  const filteredProducts = isSearched
-    ? products.filter(product => product.title.toLowerCase().includes(search.toLowerCase()))
-    : [];
+  const filteredProducts = useMemo(() => {
+    return isSearched
+      ? products.filter(product => product.title.toLowerCase().includes(search.toLowerCase()))
+      : [];
+  }, [isSearched, products, search]);
 
  
 
@@ -135,25 +96,17 @@ const Home = () => {
       </div>
     )}
     {!isSearched && (() => {
-      const elems = [];
-      products.forEach((product, i) => {
-        const batch = Math.floor(i / 12);
-        elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
-        if (i % 12 === 11) elems.push(<div key={`sent-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
-      });
-      // page sentinel to trigger fetching next page when visible
-      if (hasMore) elems.push(<div key={`page-sentinel`} ref={pageSentinelRef} className="page-sentinel" />);
-      return elems;
+      return products.map((product) => (
+        <Products key={product._id || product.id} product={product} />
+      ));
     })()}
+    {!isSearched && hasMore && (
+      <div key={`page-sentinel`} ref={pageSentinelRef} style={{ gridColumn: '1 / -1', height: '1px' }} />
+    )}
     {isSearched && filteredProducts.length > 0 && (() => {
-      const elems = [];
-      filteredProducts.forEach((product, i) => {
-        const batch = Math.floor(i / 12);
-        elems.push(<Products key={product._id || product.id} product={product} index={i} batchIndex={batch} />);
-        if (i % 12 === 11) elems.push(<div key={`sentf-${batch}`} className="batch-sentinel" data-batch={batch} aria-hidden="true" />);
-      });
-      // if we implemented search pagination later, we would add a page sentinel here too
-      return elems;
+      return filteredProducts.map((product) => (
+        <Products key={product._id || product.id} product={product} />
+      ));
     })()}
     {isSearched && filteredProducts.length === 0 && (
       <div className="no-products">

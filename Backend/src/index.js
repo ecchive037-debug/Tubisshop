@@ -12,7 +12,8 @@ const notificationRoute = require('../src/Routes/notification.route');
 // CORS configuration
 const allowedOrigins = [
   'https://tubisshop.com',
-  'https://www.tubisshop.com'
+  'https://www.tubisshop.com',
+   'http://localhost:5173'
 ];
 
 app.use(cors({
@@ -32,7 +33,7 @@ app.use(cors({
 }));
 
 // Handle preflight requests explicitly (IMPORTANT for UAE browsers)
-app.options('*', cors());
+//app.options('*', cors());
 
 // Allow larger JSON bodies
 app.use(express.json({ limit: '20mb' }));

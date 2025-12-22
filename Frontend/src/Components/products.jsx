@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import '../Style/products.css'
 import { useNavigate } from 'react-router-dom';
 import truncateTitle from '../utils/truncateTitle';
 import LazyImage from './LazyImage';
 
-const Products = ({ product, index, batchIndex }) => {
+const Products = ({ product }) => {
   const navigate = useNavigate();
 
-  const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -17,20 +16,21 @@ const Products = ({ product, index, batchIndex }) => {
     return () => clearTimeout(t);
   }, [added]);
 
-  const openProductDetail = () => {
+  const openProductDetail = useCallback(() => {
     const id = product._id || product.id;
     if (!id) return;
     navigate(`/product/${id}`, { state: { product } });
-  };
+  }, [product, navigate]);
 
-
-  const images = (product.images && product.images.length) ? product.images : (product.img ? [product.img] : []);
+  const images = useMemo(() => {
+    return (product.images && product.images.length) ? product.images : (product.img ? [product.img] : []);
+  }, [product.images, product.img]);
 
   return (
     <div className='products'>
       <div className='productCard material' onClick={openProductDetail} role="button" tabIndex={0} onKeyDown={(e)=>{ if(e.key==='Enter') openProductDetail(); }} style={{cursor:'pointer'}}>
         <div className='card-media'>
-          <LazyImage src={images[0] || '/placeholder-product.svg'} alt={product.title} className='productImage' batchIndex={batchIndex} />   
+          <LazyImage src={images[0] || '/placeholder-product.svg'} alt={product.title} className='productImage' />   
         </div>
 
         <div className='card-body'>
@@ -48,4 +48,4 @@ const Products = ({ product, index, batchIndex }) => {
     </div>
   )
 }
-export default Products
+export default React.memo(Products);

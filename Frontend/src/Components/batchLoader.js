@@ -44,7 +44,7 @@ if (typeof window !== 'undefined' && typeof IntersectionObserver !== 'undefined'
         }
       }
     });
-  }, { rootMargin: '400px' });
+  }, { rootMargin: '600px' });
 
   const observeAll = () => {
     document.querySelectorAll('.batch-sentinel[data-batch]').forEach(el => io.observe(el));
