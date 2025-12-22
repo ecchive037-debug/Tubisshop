@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
   price: { type: String, required: true },
-  // support up to 3 images per product; keep `img` for backward compatibility
+  // support up to 12 images per product; keep `img` for backward compatibility
   images: {
     type: [String],
     validate: {
-      validator: function (arr) { return !arr || arr.length <= 3; },
-      message: 'A product can contain at most 3 images.'
+      validator: function (arr) { return !arr || arr.length <= 12; },
+      message: 'A product can contain at most 12 images.'
     },
     default: []
   },

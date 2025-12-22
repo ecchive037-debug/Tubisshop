@@ -1,11 +1,3 @@
-import TiktokPixel from 'tiktok-pixel';
-
-// Initialize TikTok Pixel
-TiktokPixel.init('D54GNSJC77UAQNS9HE5G'); 
-
-// Track page view
-TiktokPixel.pageView(); // <-- use this instead of pageLoad
-
 
 export function loadGTM() {
   (function(w,d,s,l,i){
@@ -19,8 +11,3 @@ export function loadGTM() {
   })(window,document,'script','dataLayer','GTM-KZ3F2KQD');
 }
 
-
-export {
-    TiktokPixel,
-    
-};

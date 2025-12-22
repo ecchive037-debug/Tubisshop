@@ -15,14 +15,14 @@ async function createProduct(req, res) {
       return res.status(400).json({ message: 'title and price are required' });
     }
 
-    // ensure images is an array with <= 3 items
+    // ensure images is an array with <= 12 items
     let finalImages = [];
-    if (Array.isArray(images)) finalImages = images.filter(Boolean).slice(0, 3);
-    else if (typeof images === 'string' && images.trim()) finalImages = [images.trim()].slice(0, 3);
+    if (Array.isArray(images)) finalImages = images.filter(Boolean).slice(0, 12);
+    else if (typeof images === 'string' && images.trim()) finalImages = [images.trim()].slice(0, 12);
     else if (typeof img === 'string' && img.trim()) finalImages = [img.trim()];
 
-    if (finalImages.length > 3) {
-      return res.status(400).json({ message: 'You can upload up to 3 images only' });
+    if (finalImages.length > 12) {
+      return res.status(400).json({ message: 'You can upload up to 12 images only' });
     }
 
     // keep `img` for backward compatibility (first image or empty string)

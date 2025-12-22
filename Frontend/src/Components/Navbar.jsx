@@ -3,7 +3,7 @@ import "../Style/Navbar.css";
 import { useNavigate } from "react-router-dom";
 //import logo from "../assets/2.jpg"
 import logo from "../../public/favicon.png"
-import { TiktokPixel, loadGTM } from '../Components/script.js';
+import { loadGTM } from '../Components/script.js';
 
 const Navbar = () => {
   const navigate = useNavigate();

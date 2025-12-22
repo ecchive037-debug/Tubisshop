@@ -64,8 +64,8 @@ const SellerUpload = () => {
   const onFileChange = (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
-    // Add up to 3 images total
-    const allowed = files.slice(0, 3 - images.length);
+    // Add up to 12 images total
+    const allowed = files.slice(0, 12 - images.length);
     const readers = allowed.map(f => new Promise((resolve) => {
       const r = new FileReader();
       r.onload = (ev) => resolve(ev.target.result);
@@ -74,7 +74,7 @@ const SellerUpload = () => {
 
     Promise.all(readers).then(results => {
       setImages(prev => {
-        const next = prev.concat(results).slice(0, 3);
+        const next = prev.concat(results).slice(0, 12);
         return next;
       });
       // set preview to the most recently added or first
@@ -155,10 +155,10 @@ const SellerUpload = () => {
                 <div style={{display:'flex',flexDirection:'column',gap:8}}>
                   <input value={images[0] || ''} onChange={e=>{
                     const v = e.target.value; setImages(prev => {
-                      const next = [...prev]; next[0] = v; return next.filter(Boolean).slice(0,3);
+                      const next = [...prev]; next[0] = v; return next.filter(Boolean).slice(0,12);
                     });
                   }} placeholder="Image URL (optional) - first image shown as main" aria-label="Image URL" />
-                  <small style={{color:'#6b7280'}}>You can add up to 3 images — use the file uploader to add more.</small>
+                  <small style={{color:'#6b7280'}}>You can add up to 12 images — use the file uploader to add more.</small>
                 </div>
                 <label style={{display:'block',marginTop:8,fontSize:13,color:'#334155'}}>Description (optional)</label>
                 <textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Short description about this product" aria-label="Product description" rows={3} />
