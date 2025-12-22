@@ -10,12 +10,16 @@ const LazyImage = ({ src, alt = '', className = '', style, placeholder = '/place
     const img = imgRef.current;
     if (!img) return;
 
+    // reset loaded flag when src changes
+    setLoaded(false);
+    if (img.dataset) img.dataset.src = src;
+
     let observer;
 
     const loadImg = () => {
-      if (loaded) return;
       const realSrc = img.dataset && img.dataset.src ? img.dataset.src : src;
-      if (realSrc && img.src !== realSrc) img.src = realSrc;
+      if (!realSrc) return;
+      if (img.src !== realSrc) img.src = realSrc;
       setLoaded(true);
     };
 
@@ -42,6 +46,8 @@ const LazyImage = ({ src, alt = '', className = '', style, placeholder = '/place
         });
       }, { rootMargin: '200px' });
       observer.observe(img);
+      // attempt immediate load in case this image was already intersecting or batch is allowed
+      tryLoad();
     } else {
       // fallback: load immediately if batch allowed
       if (batchIndex === undefined || batchIndex === null || batchLoader.isAllowed(batchIndex)) loadImg();
@@ -51,7 +57,7 @@ const LazyImage = ({ src, alt = '', className = '', style, placeholder = '/place
       observer && observer.disconnect();
       unsub && typeof unsub === 'function' && unsub();
     };
-  }, [src, placeholder, batchIndex, loaded]);
+  }, [src, placeholder, batchIndex]);
 
   return (
     <img

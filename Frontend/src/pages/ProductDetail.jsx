@@ -59,19 +59,20 @@ const ProductDetail = () => {
       <div className="detail-header">
         <div className="detail-image-wrap">
           <LazyImage src={mainImage || product.img || '/placeholder-product.svg'} alt={product.title} className="detail-image" />
-          {/* image selector dots (click to change main image) */}
+          {/* thumbnail selector (click to change main image) */}
           {(product.images && product.images.length > 0) && (
-            <div className="image-dots">
+            <div className="thumbnail-list" role="tablist" aria-label="Product image thumbnails">
               {product.images.map((it, idx) => (
-                <div
+                <button
                   key={idx}
-                  role="button"
-                  aria-label={`Show image ${idx + 1}`}
-                  className={`image-dot ${it === mainImage ? 'active' : ''}`}
+                  type="button"
+                  className={`thumbnail ${it === mainImage ? 'active' : ''}`}
                   onClick={() => setMainImage(it)}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setMainImage(it) }}
-                  tabIndex={0}
-                />
+                  aria-label={`Show image ${idx + 1}`}
+                >
+                  <LazyImage src={it} alt={`thumbnail-${idx+1}`} />
+                </button>
               ))}
             </div>
           )}
