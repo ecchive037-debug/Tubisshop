@@ -31,7 +31,7 @@ app.use(cors({
 }));
 
 // Handle preflight requests explicitly (IMPORTANT for UAE browsers)
-app.options('*', cors());
+app.options(/.*/, cors());
 
 // Allow larger JSON bodies
 app.use(express.json({ limit: '20mb' }));
