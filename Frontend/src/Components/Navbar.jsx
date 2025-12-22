@@ -16,9 +16,6 @@ const Navbar = () => {
 useEffect(() => {
     // Load GTM after page loads
     loadGTM();
-
-    // You can also trigger TikTok custom events
-    TiktokPixel.track('PageView');
   }, []);
 
   return (
