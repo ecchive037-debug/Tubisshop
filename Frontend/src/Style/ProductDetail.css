@@ -3,11 +3,11 @@
 
 /* Image and meta — fix meta (form) width to 580px and let image area take remaining space */
 .detail-meta{flex:0 0 580px;width:580px;box-sizing:border-box;min-width:320px;display:flex;flex-direction:column;justify-content:flex-start}
-.detail-image-wrap{flex:1;width:auto;min-width:420px;background:#f8fafc;padding:12px;border-radius:6px}
-.detail-image{width:100%;height:420px;object-fit:cover;border-radius:6px}
+.detail-image-wrap{flex:1;width:auto;min-width:420px;background:#f8fafc;padding:12px;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+.detail-image{width:100%;max-width:100%;height:420px;object-fit:cover;border-radius:6px;display:block}
 
 /* thumbnail list (click to change main image) */
-.thumbnail-list{display:flex;gap:8px;margin-top:12px;align-items:center;justify-content:flex-start;flex-wrap:wrap}
+.thumbnail-list{display:flex;gap:8px;margin-top:12px;align-items:center;justify-content:center;flex-wrap:wrap;position:absolute;left:50%;transform:translateX(-50%);bottom:12px;z-index:6;max-width:calc(100% - 32px);padding:6px 8px;border-radius:10px}
 .thumbnail{display:inline-block;width:72px;height:72px;padding:2px;border-radius:8px;background:transparent;border:2px solid transparent;overflow:hidden;cursor:pointer}
 .thumbnail img{width:100%;height:100%;object-fit:cover;border-radius:6px;display:block}
 .thumbnail.active{border-color:#ef4444;transform:scale(1.04)}
@@ -36,6 +36,12 @@
 	.detail-header{flex-direction:column}
 	.detail-image-wrap{flex:0 0 auto;width:100%;}
 	.detail-meta{width:100%}
+	/* Make main image scale properly on small screens */
+	.detail-image{height:auto;max-height:60vh;object-fit:contain}
+
+	/* Place thumbnails below image on very small screens to avoid overlap */
+	.thumbnail-list{position:static;margin-top:12px;padding:0;transform:none;max-width:none}
+	.thumbnail{width:56px;height:56px}
 	.detail-actions{flex-direction:column;align-items:stretch}
 	.detail-actions .btn{width:100%}
 }

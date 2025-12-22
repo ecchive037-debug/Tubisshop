@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../Style/AdminDashboard.css';
 import '../Style/AdminProducts.css';
+import SkeletonLoader from '../Components/SkeletonLoader.jsx';
 import truncateTitle from '../utils/truncateTitle';
 import LazyImage from '../Components/LazyImage';
 
@@ -85,7 +86,7 @@ const AdminProducts = () => {
       </header>
 
       {loading ? (
-        <div className="orders-empty">Loading products…</div>
+        <div className="orders-empty"><SkeletonLoader count={6} /></div>
       ) : products.length === 0 ? (
         <div className="orders-empty">You have not uploaded any products yet.</div>
       ) : (

@@ -2,27 +2,26 @@
 const CACHE_KEY = 'product_cache';
 const CACHE_EXPIRY_KEY = 'product_cache_expiry';
 const CACHE_PAGE_KEY = 'product_cache_page';
-const CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
-const MAX_CACHED_PRODUCTS = 60; // Cache only up to 10 pages worth (6 products per page)
+const CACHE_DURATION = 1000 * 60 * 60 * 24 * 7; // 7 days
+const MAX_CACHED_PRODUCTS = 200; // Allow larger cache so deployed users keep more locally
 
 export const getProductsFromCache = () => {
   try {
     const cached = localStorage.getItem(CACHE_KEY);
     const expiry = localStorage.getItem(CACHE_EXPIRY_KEY);
-    
+
     if (!cached || !expiry) return null;
-    
+
     // Check if cache has expired
     if (Date.now() > parseInt(expiry)) {
       clearProductsCache();
       return null;
     }
-    
+
     const products = JSON.parse(cached);
-    
-    // Return only the first 6 products from cache to avoid loading all at once
-    // This ensures the page refreshes fast with partial data
-    return products.slice(0, 6);
+
+    // Return full cached products (up to MAX_CACHED_PRODUCTS)
+    return products || null;
   } catch (error) {
     console.error('Error reading from cache:', error);
     return null;

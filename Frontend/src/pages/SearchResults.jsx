@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Products from "../Components/products.jsx";
+import SkeletonLoader from "../Components/SkeletonLoader.jsx";
 import "../Style/Home.css";
 
 const API = import.meta.env.VITE_API_URL;
@@ -65,7 +66,11 @@ const SearchResults = () => {
     <div className="Home-container">
       <h2 className="search-header">Search Results for "{searchTerm}"</h2>
       <div className="products-container">
-        {products.length > 0 ? (() => {
+        {loading && products.length === 0 ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 20 }}>
+            <SkeletonLoader count={12} />
+          </div>
+        ) : products.length > 0 ? (() => {
           const elems = [];
           products.forEach((product, i) => {
             const price = typeof product.price === 'string' ? product.price.replace(/^\s*\$/,'AED ') : product.price;

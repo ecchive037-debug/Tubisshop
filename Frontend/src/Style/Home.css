@@ -112,8 +112,11 @@
 }
 
 .slider-outer {
-  width: 100%;
-  max-width: 1180px; /* ya jo tumhara layout hai */
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  /* keep the outer full-viewport but align it with the centered page layout */
+  margin-left: calc(50% - 50vw);
   padding: 0 12px;
   overflow: hidden;
 }

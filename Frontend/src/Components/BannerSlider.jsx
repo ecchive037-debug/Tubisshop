@@ -22,7 +22,7 @@ const BannerSlider = ({ images = [], interval = 4000, width = 1200, height = 320
   const prev = () => go((index - 1 + images.length) % images.length);
 
   return (
-    <div className="slider-outer" style={{ maxWidth: width }}>
+    <div className="slider-outer">
       <div className="slider">
         <div
           className="slider-track"
