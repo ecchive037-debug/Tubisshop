@@ -40,7 +40,7 @@ async function getProducts(req, res) {
     // Support pagination and basic search
     // Query params: page (1-indexed), limit, q (search term)
     const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-    const limit = Math.max(1, Math.min(100, parseInt(req.query.limit, 10) || 12));
+    const limit = Math.max(1, Math.min(100, parseInt(req.query.limit, 10) || 6));
     const q = (req.query.q || '').trim();
 
     const filter = {};
