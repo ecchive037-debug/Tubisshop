@@ -4,27 +4,51 @@ import Products from '../Components/products.jsx';
 // Footer provided by layout
 
 const API = import.meta.env.VITE_API_URL;
-const PRODUCTS_PER_PAGE = 6;
+const PRODUCTS_PER_PAGE = 5;
+const API_CALL_DELAY = 300; // 300ms delay between API calls
 
 const AllProducts = () => {
   const [search, setSearch] = useState('');
   const [isSearched, setIsSearched] = useState(false);
   const [products, setProducts] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [pages, setPages] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const pageSentinelRef = useRef(null);
   const isMountedRef = useRef(true);
+  const abortControllerRef = useRef(null);
+  const lastFetchTimeRef = useRef(0);
 
   const fetchProductsPage = useCallback(async (p = 1) => {
     if (!isMountedRef.current) return;
     
+    // Cancel previous request if exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    
+    // Create new abort controller for this request
+    abortControllerRef.current = new AbortController();
+    
     try {
       setLoading(true);
-      const res = await fetch(`${API}/api/products?page=${p}&limit=${PRODUCTS_PER_PAGE}`);
+      
+      // Add delay between requests to avoid overwhelming server
+      const timeSinceLastFetch = Date.now() - lastFetchTimeRef.current;
+      if (timeSinceLastFetch < API_CALL_DELAY) {
+        await new Promise(resolve => setTimeout(resolve, API_CALL_DELAY - timeSinceLastFetch));
+      }
+      
+      const res = await fetch(
+        `${API}/api/products?page=${p}&limit=${PRODUCTS_PER_PAGE}`,
+        { signal: abortControllerRef.current.signal }
+      );
+      
       if (!res.ok) throw new Error('Failed to fetch products');
       const data = await res.json();
+      lastFetchTimeRef.current = Date.now();
       
       if (!isMountedRef.current) return;
       
@@ -33,6 +57,7 @@ const AllProducts = () => {
         setProducts(data.products || []);
         setPages(data.pages || 1);
         setPage(1);
+        setInitialLoadDone(true);
       } else {
         setProducts(prev => [...prev, ...(data.products || [])]);
         setPage(data.page || p);
@@ -41,9 +66,12 @@ const AllProducts = () => {
       // Check if there are more products to load
       setHasMore((data.page || p) < (data.pages || 1));
     } catch (err) {
-      console.error('Error fetching products:', err);
-      if (isMountedRef.current) {
-        setHasMore(false);
+      // Only log if it's not an abort error
+      if (err.name !== 'AbortError') {
+        console.error('Error fetching products:', err);
+        if (isMountedRef.current) {
+          setHasMore(false);
+        }
       }
     } finally {
       if (isMountedRef.current) {
@@ -52,32 +80,42 @@ const AllProducts = () => {
     }
   }, []);
 
-  // Fetch products on mount
+  // DO NOT fetch on mount - wait for user scroll
   useEffect(() => {
     isMountedRef.current = true;
-    fetchProductsPage(1);
     
     return () => {
       isMountedRef.current = false;
+      // Cancel any pending requests on unmount
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
     };
   }, []);
 
-  // Infinite scroll observer
+  // Infinite scroll observer - ONLY trigger after first scroll
   useEffect(() => {
     const node = pageSentinelRef.current;
     if (!node) return;
     
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && hasMore && !loading && page > 0) {
-          fetchProductsPage(page + 1);
+        if (entry.isIntersecting) {
+          // First intersection: load initial products
+          if (!initialLoadDone) {
+            fetchProductsPage(1);
+          }
+          // Subsequent intersections: load next page
+          else if (hasMore && !loading && page > 0) {
+            fetchProductsPage(page + 1);
+          }
         }
       });
     }, { rootMargin: '400px' });
     
     io.observe(node);
     return () => io.disconnect();
-  }, [hasMore, loading, page, fetchProductsPage]);
+  }, [hasMore, loading, page, initialLoadDone, fetchProductsPage]);
 
   const filteredProducts = useMemo(() => {
     return isSearched
@@ -103,6 +141,12 @@ const AllProducts = () => {
             </div>
           )}
 
+          {!isSearched && !initialLoadDone && (
+            <div style={{gridColumn: "1 / -1", textAlign: "center", padding: "40px 20px"}}>
+              <p>Scroll down to load products...</p>
+            </div>
+          )}
+
           {!isSearched && (() => {
             return products.map((product) => (
               <Products key={product._id || product.id} product={product} />
@@ -111,9 +155,9 @@ const AllProducts = () => {
           {!isSearched && hasMore && (
             <div key={`page-sentinel`} ref={pageSentinelRef} style={{ gridColumn: '1 / -1', height: '1px' }} />
           )}
-          {!isSearched && loading && (
+          {!isSearched && loading && initialLoadDone && (
             <div style={{gridColumn: "1 / -1", textAlign: "center", padding: "20px"}}>
-              <p>Loading products...</p>
+              <p>Loading more products...</p>
             </div>
           )}
 

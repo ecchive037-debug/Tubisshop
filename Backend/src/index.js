@@ -5,7 +5,6 @@ const cors = require('cors');
 const userRoute = require('../src/Routes/user.route');
 const adminRoute = require('../src/Routes/admin.route');
 const productRoute = require('../src/Routes/product.route');
-const cartRoute = require('../src/Routes/cart.route');
 const orderRoute = require('../src/Routes/order.route');
 const notificationRoute = require('../src/Routes/notification.route');
 
@@ -13,7 +12,7 @@ const notificationRoute = require('../src/Routes/notification.route');
 const allowedOrigins = [
   'https://tubisshop.com',
   'https://www.tubisshop.com',
-   'http://localhost:5173'
+  'http://localhost:5173'
 ];
 
 app.use(cors({
@@ -33,7 +32,7 @@ app.use(cors({
 }));
 
 // Handle preflight requests explicitly (IMPORTANT for UAE browsers)
-app.options('*', cors());
+//app.options('*', cors());
 
 // Allow larger JSON bodies
 app.use(express.json({ limit: '20mb' }));
@@ -42,7 +41,6 @@ app.use(express.urlencoded({ limit: '20mb', extended: true }));
 // Routes
 app.use('/api/auth', adminRoute);
 app.use('/api', productRoute);
-app.use('/api/cart', cartRoute);
 app.use('/api/order', orderRoute);
 app.use('/api/notifications', notificationRoute);
 
