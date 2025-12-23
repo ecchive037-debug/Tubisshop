@@ -15,7 +15,6 @@ app.set('trust proxy', 1);
 const allowedOrigins = [
   'https://tubisshop.com',
   'https://www.tubisshop.com',
-  'https://tubisshop.vercel.app'
 ];
 
 app.use(cors({
