@@ -8,14 +8,10 @@ const notificationRoute = require('./Routes/notification.route');
 
 const app = express();
 
-/* ===============================
-   TRUST PROXY (Render + UAE)
-================================ */
+
 app.set('trust proxy', 1);
 
-/* ===============================
-   CORS CONFIG (SAFE)
-================================ */
+
 const allowedOrigins = [
   'https://tubisshop.com',
   'https://www.tubisshop.com',
@@ -34,25 +30,18 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-app.options('*', cors());
+app.options('/*', cors());
 
-/* ===============================
-   BODY LIMIT
-================================ */
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-/* ===============================
-   ROUTES
-================================ */
+
 app.use('/api/auth', adminRoute);
 app.use('/api', productRoute);
 app.use('/api/order', orderRoute);
 app.use('/api/notifications', notificationRoute);
 
-/* ===============================
-   ERROR HANDLER
-================================ */
+
 app.use((err, req, res, next) => {
   if (!err) return next();
 
