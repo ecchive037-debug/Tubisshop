@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 
-mongoose.set('strictQuery', false);
+const connectDB = async () => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI is not defined in .env");
+    }
 
-
-const connectDB = () => {
-  return mongoose
-    .connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    })
-    .then(() => {
-      console.log('MongoDB connected');
-      return mongoose;
-    })
-    .catch((err) => {
-      console.error('MongoDB connection error:', err);
-      throw err;
+      serverSelectionTimeoutMS: 30000, // 30 seconds timeout
     });
+
+    console.log("MongoDB connected");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  }
 };
 
 module.exports = connectDB;

@@ -15,7 +15,7 @@ app.set('trust proxy', 1);
 const allowedOrigins = [
   'https://tubisshop.com',
   'https://www.tubisshop.com',
-  'http://localhost:5173'
+  ''
 ];
 
 app.use(cors({
@@ -63,8 +63,5 @@ app.use((err, req, res, next) => {
    SERVER (Render ONLY)
 ================================ */
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
 
 module.exports = app;
