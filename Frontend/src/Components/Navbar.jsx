@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Style/Navbar.css";
 import { useNavigate } from "react-router-dom";
 //import logo from "../assets/2.jpg"
-import logo from "../../public/favicon.png"
+const logo = '/favicon.png';
 import { loadGTM } from '../Components/script.js';
 
 const Navbar = () => {
