@@ -51,46 +51,54 @@ const Home = () => {
   const [isSearched, setIsSearched] = useState(false);
 
   /* ---------------- FETCH FUNCTION ---------------- */
-  const fetchProducts = useCallback(async (p = 1) => {
-    if (isFetchingRef.current) return;
-    isFetchingRef.current = true;
+  const fetchProducts = useCallback(
+    async (p = 1) => {
+      if (isFetchingRef.current) return;
+      isFetchingRef.current = true;
 
-    try {
-      setLoading(true);
-      const res = await fetch(
-        `${API}/api/products?page=${p}&limit=${PRODUCTS_PER_PAGE}`
-      );
-      const data = await res.json();
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `${API}/api/products?page=${p}&limit=${PRODUCTS_PER_PAGE}`
+        );
+        const data = await res.json();
 
-      setProducts((prev) =>
-        p === 1 ? data.products : [...prev, ...data.products]
-      );
-      setPage(data.page);
-      setPages(data.pages);
-      setHasMore(data.page < data.pages);
+        // Ensure data.products is always an array
+        const fetchedProducts = Array.isArray(data.products)
+          ? data.products
+          : [];
 
-      saveCache({
-        products: p === 1 ? data.products : [...products, ...data.products],
-        page: data.page,
-        pages: data.pages,
-      });
-    } catch (err) {
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-      isFetchingRef.current = false;
-    }
-  }, [products]);
+        setProducts((prev) =>
+          p === 1 ? fetchedProducts : [...prev, ...fetchedProducts]
+        );
+        setPage(data.page);
+        setPages(data.pages);
+        setHasMore(data.page < data.pages);
+
+        saveCache({
+          products: p === 1 ? fetchedProducts : [...products, ...fetchedProducts],
+          page: data.page,
+          pages: data.pages,
+        });
+      } catch (err) {
+        console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
+        isFetchingRef.current = false;
+      }
+    },
+    [products]
+  );
   /* ------------------------------------------------ */
 
   /* -------- INSTANT LOAD FROM CACHE -------- */
   useEffect(() => {
     const cached = loadCache();
     if (cached) {
-      setProducts(cached.products);
-      setPage(cached.page);
-      setPages(cached.pages);
-      setHasMore(cached.page < cached.pages);
+      setProducts(cached.products ?? []);
+      setPage(cached.page ?? 1);
+      setPages(cached.pages ?? 1);
+      setHasMore((cached.page ?? 1) < (cached.pages ?? 1));
       setLoading(false);
     }
     fetchProducts(1); // background refresh
@@ -119,7 +127,7 @@ const Home = () => {
   const filteredProducts = useMemo(() => {
     if (!isSearched) return [];
     return products.filter((p) =>
-      p.title.toLowerCase().includes(search.toLowerCase())
+      p.title?.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, isSearched, products]);
   /* ---------------------------------------- */
@@ -132,7 +140,7 @@ const Home = () => {
 
       <div className="products-container">
         {!isSearched &&
-          products.map((product) => (
+          products?.map((product) => (
             <Products key={product._id} product={product} />
           ))}
 
@@ -143,9 +151,17 @@ const Home = () => {
         )}
 
         {isSearched &&
-          filteredProducts.map((product) => (
+          filteredProducts?.map((product) => (
             <Products key={product._id} product={product} />
           ))}
+
+        {/* Optional: empty state */}
+        {(!loading && !isSearched && products.length === 0) && (
+          <p>No products found</p>
+        )}
+        {(!loading && isSearched && filteredProducts.length === 0) && (
+          <p>No products match your search</p>
+        )}
       </div>
     </div>
   );
