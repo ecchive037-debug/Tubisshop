@@ -15,6 +15,7 @@ app.set('trust proxy', 1);
 const allowedOrigins = [
   'https://tubisshop.com',
   'https://www.tubisshop.com',
+  'http://localhost:5173'
 ];
 
 app.use(cors({
