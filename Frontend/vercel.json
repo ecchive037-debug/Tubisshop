@@ -1,7 +1,13 @@
 {
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 10
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://tubisshop.onrender.com/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
-  }
+  ]
 }
