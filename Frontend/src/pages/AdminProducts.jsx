@@ -49,7 +49,8 @@ const AdminProducts = () => {
       setLoading(true);
       try {
         const API = import.meta.env.VITE_API_URL;
-        const res = await fetch(`${API}/api/products`);
+        // Request a large limit so backend returns up to its max (backend caps limit at 100)
+        const res = await fetch(`${API}/api/products?limit=100`);
         const data = await res.json();
         if (res.ok) {
           setProducts(data.products || []);

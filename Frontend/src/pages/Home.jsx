@@ -8,7 +8,7 @@ import bannerImg from "../assets/home-banner.jpg";
 import bannerImg1 from "../assets/second.jpg";
 
 const API = import.meta.env.VITE_API_URL;
-const PRODUCTS_PER_PAGE = 5;
+const PRODUCTS_PER_PAGE = 18;
 
 /* ---------------- CACHE CONFIG ---------------- */
 const CACHE_KEY = "tubisshop_products_v2";
@@ -136,7 +136,7 @@ const Home = () => {
             <Products key={product._id} product={product} />
           ))}
 
-        {loading && <SkeletonLoader count={5} />}
+        {loading && <SkeletonLoader count={18} />}
 
         {!isSearched && hasMore && (
           <div ref={sentinelRef} style={{ height: 1 }} />
