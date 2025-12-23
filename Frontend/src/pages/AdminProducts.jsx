@@ -86,7 +86,7 @@ const AdminProducts = () => {
       </header>
 
       {loading ? (
-        <div className="orders-empty"><SkeletonLoader count={6} /></div>
+        <div className="products-grid skeleton-grid"><SkeletonLoader count={12} /></div>
       ) : products.length === 0 ? (
         <div className="orders-empty">You have not uploaded any products yet.</div>
       ) : (
