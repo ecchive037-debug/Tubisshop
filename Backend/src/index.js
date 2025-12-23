@@ -1,67 +1,50 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
+const app = express();
 
-const userRoute = require('../src/Routes/user.route');
-const adminRoute = require('../src/Routes/admin.route');
-const productRoute = require('../src/Routes/product.route');
-const orderRoute = require('../src/Routes/order.route');
-const notificationRoute = require('../src/Routes/notification.route');
+app.set('trust proxy', 1);
 
-// CORS configuration
-const allowedOrigins = [
-  'https://tubisshop.com',
-  'https://www.tubisshop.com'
-];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    // allow Postman, server-to-server, mobile apps
+const corsOptions = {
+  origin: function (origin, callback) {
     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
+    const allowedOrigins = [
+      'https://tubisshop.com',
+      'https://www.tubisshop.com'
+    ];
 
-    return callback(new Error('Not allowed by CORS'));
+    callback(null, allowedOrigins.includes(origin));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+  optionsSuccessStatus: 200,
+};
 
-// Handle preflight requests explicitly (IMPORTANT for UAE browsers)
-app.options(/.*/, cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
-// Allow larger JSON bodies
 app.use(express.json({ limit: '20mb' }));
-app.use(express.urlencoded({ limit: '20mb', extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
 // Routes
-app.use('/api/auth', adminRoute);
-app.use('/api', productRoute);
-app.use('/api/order', orderRoute);
-app.use('/api/notifications', notificationRoute);
+app.use('/api/auth', require('../src/Routes/admin.route'));
+app.use('/api', require('../src/Routes/product.route'));
+app.use('/api/order', require('../src/Routes/order.route'));
+app.use('/api/notifications', require('../src/Routes/notification.route'));
 
-// Error handling middleware
+// Error Handler
 app.use((err, req, res, next) => {
   if (!err) return next();
 
-  const isPayloadTooLarge =
-    err.status === 413 ||
-    err.type === 'entity.too.large' ||
-    err.code === 'LIMIT_FILE_SIZE';
-
-  if (isPayloadTooLarge) {
+  if (err.status === 413) {
     return res.status(413).json({
-      message: 'Payload too large — please upload smaller images or use image URLs (limit 20MB).',
+      message: 'Payload too large (20MB max)',
     });
   }
 
-  console.error('Unhandled server error:', err.message);
-  return res.status(err.status || 500).json({
-    message: err.message || 'Server error',
-  });
+  console.error(err);
+  res.status(500).json({ message: 'Server error' });
 });
 
 module.exports = app;
