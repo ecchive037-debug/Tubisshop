@@ -6,6 +6,9 @@
       "dest": "https://tubisshop.onrender.com/api/$1"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
