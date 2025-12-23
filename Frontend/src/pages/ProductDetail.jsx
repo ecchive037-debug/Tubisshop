@@ -5,6 +5,7 @@ import '../Style/ProductDetail.css';
 import Orderform from "../pages/Orderform.jsx";
 import LazyImage from '../Components/LazyImage';
 // Footer provided by layout
+import { getAllCachedProducts } from '../utils/productCache';
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -25,10 +26,21 @@ const ProductDetail = () => {
       setMainImage(imgs[0] || null);
       return; // already have product via navigation state
     }
+    // try to read from shared cache for instant display
+    const cached = getAllCachedProducts();
+    const maybe = (cached && Array.isArray(cached.products))
+      ? cached.products.find(p => String(p._id || p.id) === String(id))
+      : null;
 
+    if (maybe) {
+      setProduct(maybe);
+      setLoading(false);
+    }
+
+    // always fetch latest from API in background
     const fetchProduct = async () => {
-      setLoading(true);
       try {
+        if (!maybe) setLoading(true);
         const res = await fetch(`${API}/api/products/${id}`);
         if (!res.ok) throw new Error('Failed to fetch product');
         const data = await res.json();
@@ -36,9 +48,11 @@ const ProductDetail = () => {
       } catch (err) {
         console.error(err);
         setError('Could not load product details');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
+
     fetchProduct();
   }, [id]);
 

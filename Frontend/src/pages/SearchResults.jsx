@@ -5,6 +5,7 @@ import SkeletonLoader from "../Components/SkeletonLoader.jsx";
 import "../Style/Home.css";
 
 const API = import.meta.env.VITE_API_URL;
+import { getAllCachedProducts } from '../utils/productCache';
 
 const SearchResults = () => {
   const navigate = useNavigate();
@@ -37,12 +38,18 @@ const SearchResults = () => {
   };
 
   useEffect(() => {
-    // whenever search term changes, reset and fetch first page
+    // whenever search term changes, try to show cached matches first, then fetch
     setProducts([]);
     setPage(1);
     setPages(1);
     setHasMore(false);
     if (searchTerm && searchTerm.trim()) {
+      const cached = getAllCachedProducts();
+      if (cached && Array.isArray(cached.products) && cached.products.length) {
+        const matches = cached.products.filter(p => (p.title || '').toLowerCase().includes(searchTerm.toLowerCase()));
+        if (matches.length) setProducts(matches);
+      }
+      // always fetch fresh results from API
       fetchSearchPage(1);
     }
   }, [searchTerm]);

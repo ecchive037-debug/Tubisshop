@@ -10,30 +10,8 @@ import bannerImg1 from "../assets/second.jpg";
 const API = import.meta.env.VITE_API_URL;
 const PRODUCTS_PER_PAGE = 18;
 
-/* ---------------- CACHE CONFIG ---------------- */
-const CACHE_KEY = "tubisshop_products_v2";
-const CACHE_TTL = 1000 * 60 * 30;
+import { getAllCachedProducts, setProductsInCache } from '../utils/productCache';
 
-const loadCache = () => {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (Date.now() - parsed.timestamp > CACHE_TTL) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-};
-
-const saveCache = (data) => {
-  try {
-    localStorage.setItem(
-      CACHE_KEY,
-      JSON.stringify({ ...data, timestamp: Date.now() })
-    );
-  } catch {}
-};
 /* ------------------------------------------------ */
 
 const Home = () => {
@@ -75,7 +53,8 @@ const Home = () => {
         setPages(data.pages);
         setHasMore(data.page < data.pages);
 
-        saveCache({
+        // persist to shared cache
+        setProductsInCache({
           products: p === 1 ? fetchedProducts : [...products, ...fetchedProducts],
           page: data.page,
           pages: data.pages,
@@ -93,12 +72,12 @@ const Home = () => {
 
   /* -------- INSTANT LOAD FROM CACHE -------- */
   useEffect(() => {
-    const cached = loadCache();
+    const cached = getAllCachedProducts();
     if (cached) {
-      setProducts(cached.products ?? []);
-      setPage(cached.page ?? 1);
-      setPages(cached.pages ?? 1);
-      setHasMore((cached.page ?? 1) < (cached.pages ?? 1));
+      setProducts(cached.products || []);
+      setPage(cached.page || 1);
+      setPages(cached.pages || 1);
+      setHasMore((cached.page || 1) < (cached.pages || 1));
       setLoading(false);
     }
     fetchProducts(1); // background refresh

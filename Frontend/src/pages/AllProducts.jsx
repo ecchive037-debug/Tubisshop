@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import '../Style/AllProducts.css';
 import Products from '../Components/products.jsx';
+import { getAllCachedProducts } from '../utils/productCache';
 
 const API = import.meta.env.VITE_API_URL;
 const PRODUCTS_PER_PAGE = 24;
@@ -43,7 +44,16 @@ const AllProducts = () => {
 
   // ⚡ load first page instantly
   useEffect(() => {
-    fetchProducts(1);
+    const cached = getAllCachedProducts();
+    if (cached && Array.isArray(cached.products) && cached.products.length) {
+      setProducts(cached.products);
+      setPage(cached.page || 1);
+      setHasMore((cached.page || 1) < (cached.pages || 1));
+      const next = (cached.page || 1) + 1;
+      fetchProducts(next);
+    } else {
+      fetchProducts(1);
+    }
   }, []);
 
   // ♾️ infinite scroll
