@@ -4,6 +4,7 @@ import '../Style/AdminProducts.css';
 import SkeletonLoader from '../Components/SkeletonLoader.jsx';
 import truncateTitle from '../utils/truncateTitle';
 import LazyImage from '../Components/LazyImage';
+import { getAllCachedProducts } from '../utils/productCache';
 
 // Small helper component to show truncated title with an expand toggle (admin-only list)
 function TitleWithToggle({ title, id }) {
@@ -45,6 +46,11 @@ const AdminProducts = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const cached = getAllCachedProducts();
+    if (cached && Array.isArray(cached.products) && cached.products.length) {
+      setProducts(cached.products);
+    }
+
     const fetchProducts = async () => {
       setLoading(true);
       try {
